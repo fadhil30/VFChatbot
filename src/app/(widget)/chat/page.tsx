@@ -7,7 +7,7 @@ import { MessageCircle, Home, Truck, HelpCircle, Search, ChevronRight } from "lu
 const THEME_BG = "bg-[#1a1a1a]"; // Main dark background
 const ACCENT_COLOR = "bg-[#2d2d2d]"; // Slightly lighter for cards
 
-export default function WidgetPage() {
+export default function ChatPage() {
   // State to handle switching between tabs
   const [activeTab, setActiveTab] = useState("home");
 
