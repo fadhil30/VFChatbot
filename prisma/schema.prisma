@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- 1. The Bot Configuration ---
+// This stores the settings for your clients (e.g., "Bean Brothers")
+model Chatbot {
+  id           String   @id @default(cuid())
+  name         String   // e.g., "Bean Brothers Team"
+
+  // Customization Fields (matching your UI variables)
+  primaryColor String   @default("#1a1a1a")
+  accentColor  String   @default("#2d2d2d")
+  greeting     String   @default("Hello 👋 I'm Beanie, here to help you!")
+
+  visitors     Visitor[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// --- 2. The Visitor ---
+// People who chat with the bot
+model Visitor {
+  id        String    @id @default(cuid())
+  email     String?
+  phone     String?
+
+  chatbotId String
+  chatbot   Chatbot   @relation(fields: [chatbotId], references: [id])
+
+  messages  Message[]
+  createdAt DateTime  @default(now())
+}
+
+// --- 3. The Messages ---
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  isBot     Boolean  @default(false) // true = Bot said it, false = Visitor said it
+
+  visitorId String
+  visitor   Visitor  @relation(fields: [visitorId], references: [id])
+
+  createdAt DateTime @default(now())
+}
