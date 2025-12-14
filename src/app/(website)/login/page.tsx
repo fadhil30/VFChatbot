@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { login } from "@/src/actions/login";
+import { login } from "@/actions/login";
 import Link from "next/link";
 import { Loader2, ArrowLeft } from "lucide-react";
 

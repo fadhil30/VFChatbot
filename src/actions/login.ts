@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn } from "@/src/auth";
+import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 
 export async function login(formData: FormData) {

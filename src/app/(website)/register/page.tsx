@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { registerUser } from "@/src/actions/register";
+import { registerUser } from "@/actions/register";
 import Link from "next/link";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { ChatDemo } from "@/components/ChatDemo";
 
 export default function RegisterPage() {
   const [error, setError] = useState<string | undefined>("");
@@ -36,9 +37,9 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-[#1a1a1a] rounded-2xl border border-white/10 p-8 shadow-2xl">
-        
+    <div className="min-h-screen bg-black flex">
+      <div className="flex-1 flex flex-col justify-center p-8 sm:p-12 lg:p-20 lg:max-w-xl">
+
         {/* Back Button */}
         <Link href="/" className="flex items-center text-gray-500 hover:text-white mb-6 text-sm transition">
             <ArrowLeft size={16} className="mr-1" /> Back to Home
@@ -52,21 +53,21 @@ export default function RegisterPage() {
         <form action={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1.5">Full Name</label>
-            <input 
-              name="name" 
-              type="text" 
+            <input
+              name="name"
+              type="text"
               required
               disabled={isPending}
               className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition placeholder-gray-600"
               placeholder="John Doe"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1.5">Email</label>
-            <input 
-              name="email" 
-              type="email" 
+            <input
+              name="email"
+              type="email"
               required
               disabled={isPending}
               className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition placeholder-gray-600"
@@ -76,9 +77,9 @@ export default function RegisterPage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1.5">Password</label>
-            <input 
-              name="password" 
-              type="password" 
+            <input
+              name="password"
+              type="password"
               required
               disabled={isPending}
               className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition placeholder-gray-600"
@@ -90,8 +91,8 @@ export default function RegisterPage() {
           {error && <div className="p-3 rounded-lg bg-red-500/10 text-red-400 text-sm text-center border border-red-500/20">{error}</div>}
           {success && <div className="p-3 rounded-lg bg-green-500/10 text-green-400 text-sm text-center border border-green-500/20">{success}</div>}
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={isPending}
             className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -105,6 +106,10 @@ export default function RegisterPage() {
             Log in
           </Link>
         </div>
+      </div>
+
+      <div className="hidden lg:block flex-1 bg-[#0a0a0a] border-l border-white/5 relative">
+        <ChatDemo />
       </div>
     </div>
   );
