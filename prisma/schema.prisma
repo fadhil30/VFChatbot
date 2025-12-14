@@ -10,29 +10,30 @@ datasource db {
 
 // --- 1. User (Company Owner) ---
 model User {
-  id        String    @id @default(cuid())
-  email     String    @unique
-  password  String
-  name      String?
-  
-  chatbots  Chatbot[]
-  
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  password      String
+  name          String?
+
+  chatbots      Chatbot[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 // --- 2. Chatbot ---
 model Chatbot {
   id           String   @id @default(cuid())
   name         String
-  
-  primaryColor String   @default("#1a1a1a") 
+
+  primaryColor String   @default("#1a1a1a")
   accentColor  String   @default("#2d2d2d")
   greeting     String   @default("Hello 👋 I'm Beanie, here to help you!")
-  
+
   userId       String?
   user         User?    @relation(fields: [userId], references: [id])
-  
+
   visitors     Visitor[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -56,4 +57,14 @@ model Message {
   visitorId String
   visitor   Visitor  @relation(fields: [visitorId], references: [id])
   createdAt DateTime @default(now())
+}
+
+// --- 4. Verification Token (NEW) ---
+model VerificationToken {
+  id         String   @id @default(cuid())
+  email      String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([email, token]) // Ensures one token per email at a time
 }

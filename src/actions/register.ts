@@ -3,10 +3,11 @@
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
+import { generateVerificationToken } from "@/lib/tokens";
+import { sendVerificationEmail } from "@/lib/mail";
 
 const prisma = new PrismaClient();
 
-// 1. Validation Schema
 const RegisterSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
@@ -14,7 +15,6 @@ const RegisterSchema = z.object({
 });
 
 export const registerUser = async (values: z.infer<typeof RegisterSchema>) => {
-  // 2. Validate Fields
   const validatedFields = RegisterSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -23,7 +23,6 @@ export const registerUser = async (values: z.infer<typeof RegisterSchema>) => {
 
   const { email, password, name } = validatedFields.data;
 
-  // 3. Check if user exists
   const existingUser = await prisma.user.findUnique({
     where: { email },
   });
@@ -32,10 +31,9 @@ export const registerUser = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: "Email already in use!" };
   }
 
-  // 4. Hash Password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // 5. Create User
+  // 1. Create the user (Unverified by default)
   await prisma.user.create({
     data: {
       name,
@@ -44,5 +42,10 @@ export const registerUser = async (values: z.infer<typeof RegisterSchema>) => {
     },
   });
 
-  return { success: "Account created! Please log in." };
+  // 2. Generate Token & Send Email
+  const verificationToken = await generateVerificationToken(email);
+  await sendVerificationEmail(verificationToken.email, verificationToken.token);
+
+  // 3. Return success message
+  return { success: "Confirmation email sent! Please check your inbox." };
 };
