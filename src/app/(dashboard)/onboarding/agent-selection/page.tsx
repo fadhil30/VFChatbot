@@ -2,23 +2,33 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { AgentAppearanceForm } from "@/components/onboarding/agent-setup/AgentAppearanceForm";
-import { ChatPreview } from "@/components/onboarding/agent-setup/ChatPreview";
+import { AgentSelectionForm } from "@/components/onboarding/agent-selection/AgentSelectionForm";
+import { AgentConnectionPreview } from "@/components/onboarding/agent-selection/AgentConnectionPreview";
 
-export default function AgentSetupPage() {
+export default function AgentSelectionPage() {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [primaryColor, setPrimaryColor] = useState("#3B81F6");
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [model, setModel] = useState("gpt-5.1");
+  const [instructions, setInstructions] = useState(
+    "### Role\n- Primary Function: You are an AI agent who helps users with their inquiries, issues and requests. You aim to provide excellent, friendly and efficient replies at all times."
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    // TODO: Save agent settings to database
-    // For now, simple simulation since we don't have the API yet
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    router.push("/onboarding/agent-selection");
-    setIsLoading(false);
+    
+    try {
+        const response = await fetch("/api/onboarding/complete", {
+            method: "POST",
+        });
+
+        if (response.ok) {
+            router.push("/onboarding/plans");
+        }
+    } catch (error) {
+        console.error("Error completing setup:", error);
+    } finally {
+        setIsLoading(false);
+    }
   };
 
   return (
@@ -26,13 +36,11 @@ export default function AgentSetupPage() {
       {/* Left Panel: Configuration */}
       <div className="flex-1 flex items-center justify-center p-8 lg:p-16 overflow-y-auto">
         <div className="w-full max-w-md">
-          <AgentAppearanceForm
-            name={name}
-            primaryColor={primaryColor}
-            theme={theme}
-            onNameChange={setName}
-            onColorChange={setPrimaryColor}
-            onThemeChange={setTheme}
+          <AgentSelectionForm
+            model={model}
+            instructions={instructions}
+            onModelChange={setModel}
+            onInstructionsChange={setInstructions}
           />
 
           <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
@@ -41,7 +49,7 @@ export default function AgentSetupPage() {
               disabled={isLoading}
               className="w-full py-3 px-4 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? "Saving..." : "Looks good"}
+              {isLoading ? "Saving..." : "Confirm settings"}
             </button>
           </div>
         </div>
@@ -60,13 +68,9 @@ export default function AgentSetupPage() {
           />
         </div>
 
-        {/* Preview Content */}
-        <div className="relative z-10 scale-90 lg:scale-100 transition-transform">
-          <ChatPreview 
-            name={name || "Agent"} 
-            primaryColor={primaryColor} 
-            theme={theme}
-          />
+        {/* Connection Preview */}
+        <div className="relative z-10 w-full h-full p-12">
+            <AgentConnectionPreview model={model} />
         </div>
       </div>
     </div>
