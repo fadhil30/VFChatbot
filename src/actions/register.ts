@@ -1,12 +1,10 @@
 "use server";
 
 import bcrypt from "bcryptjs";
-import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
+import { prisma } from "@/lib/prisma";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
-
-const prisma = new PrismaClient();
 
 const RegisterSchema = z.object({
   name: z.string().min(1, "Name is required"),

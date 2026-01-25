@@ -1,7 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 export const generateVerificationToken = async (email: string) => {
   const token = uuidv4();

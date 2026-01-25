@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { ArrowRight, MessageSquare, ShieldCheck, Zap } from "lucide-react";
+import { FeatureCard } from "@/components/ui/FeatureCard";
 
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-black text-white font-sans selection:bg-blue-500/30">
-
       {/* Navbar */}
       <header className="px-6 py-4 flex justify-between items-center border-b border-white/10">
         <div className="flex items-center gap-2 font-bold text-xl tracking-tight">
@@ -14,8 +14,16 @@ export default function LandingPage() {
           <span>Chatty</span>
         </div>
         <div className="flex items-center gap-4">
-          <Link href="/login" className="text-sm text-gray-400 hover:text-white transition">Log in</Link>
-          <Link href="/register" className="bg-white text-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-gray-200 transition">
+          <Link
+            href="/login"
+            className="text-sm text-gray-400 hover:text-white transition"
+          >
+            Log in
+          </Link>
+          <Link
+            href="/register"
+            className="bg-white text-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-gray-200 transition"
+          >
             Start Free
           </Link>
         </div>
@@ -32,40 +40,47 @@ export default function LandingPage() {
         </div>
 
         <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 max-w-4xl bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent">
-          The Customer Support AI <br /> You Actually Want.
+          The Customer Support AI <br />
+          You Actually Want.
         </h1>
 
         <p className="text-lg text-gray-400 mb-8 max-w-2xl leading-relaxed">
-          Train a custom chatbot on your website data in minutes. Embed it anywhere.
-          Capture leads and answer questions 24/7 automatically.
+          Train a custom chatbot on your website data in minutes. Embed it
+          anywhere. Capture leads and answer questions 24/7 automatically.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-          <Link href="/dashboard" className="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-500 transition flex items-center justify-center gap-2">
+          <Link
+            href="/dashboard"
+            className="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-500 transition flex items-center justify-center gap-2"
+          >
             Create Your Bot <ArrowRight size={18} />
           </Link>
-          <Link href="/chat" className="bg-white/5 border border-white/10 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/10 transition flex items-center justify-center gap-2">
+          <Link
+            href="/chat"
+            className="bg-white/5 border border-white/10 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/10 transition flex items-center justify-center gap-2"
+          >
             View Demo Widget
           </Link>
         </div>
 
-        {/* Feature Grid (Visual Filler) */}
+        {/* Feature Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-24 max-w-5xl w-full text-left">
-           <FeatureCard
-             icon={<Zap size={24} className="text-yellow-400"/>}
-             title="Instant Setup"
-             desc="Just enter your website URL. We scrape it and train the AI instantly."
-           />
-           <FeatureCard
-             icon={<MessageSquare size={24} className="text-blue-400"/>}
-             title="Natural Chat"
-             desc="Uses the latest LLMs to understand context, tone, and nuance."
-           />
-           <FeatureCard
-             icon={<ShieldCheck size={24} className="text-green-400"/>}
-             title="Secure & Private"
-             desc="Your data is encrypted and isolated. We value privacy first."
-           />
+          <FeatureCard
+            icon={<Zap size={24} className="text-yellow-400" />}
+            title="Instant Setup"
+            desc="Just enter your website URL. We scrape it and train the AI instantly."
+          />
+          <FeatureCard
+            icon={<MessageSquare size={24} className="text-blue-400" />}
+            title="Natural Chat"
+            desc="Uses the latest LLMs to understand context, tone, and nuance."
+          />
+          <FeatureCard
+            icon={<ShieldCheck size={24} className="text-green-400" />}
+            title="Secure & Private"
+            desc="Your data is encrypted and isolated. We value privacy first."
+          />
         </div>
       </main>
 
@@ -75,16 +90,4 @@ export default function LandingPage() {
       </footer>
     </div>
   );
-}
-
-function FeatureCard({ icon, title, desc }: any) {
-    return (
-        <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition group">
-            <div className="mb-4 bg-white/5 w-12 h-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
-                {icon}
-            </div>
-            <h3 className="font-bold text-lg mb-2 text-white">{title}</h3>
-            <p className="text-gray-400 leading-relaxed text-sm">{desc}</p>
-        </div>
-    )
 }
