@@ -105,9 +105,16 @@ export default function ManualOnboardingPage() {
   };
 
   const handleSubmit = async () => {
-    if (sources.length === 0) return;
-
     setIsLoading(true);
+
+    // If no sources are provided, just proceed to agent setup (skip training)
+    if (sources.length === 0) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        router.push("/onboarding/agent-setup");
+        setIsLoading(false);
+        return;
+    }
+
     try {
       const response = await fetch("/api/onboarding/create-manual", {
         method: "POST",
@@ -116,7 +123,7 @@ export default function ManualOnboardingPage() {
       });
 
       if (response.ok) {
-        router.push("/dashboard");
+        router.push("/onboarding/agent-setup");
       }
     } catch (error) {
       console.error("Error creating chatbot:", error);
@@ -189,7 +196,7 @@ export default function ManualOnboardingPage() {
         {/* Submit Button */}
         <button
           onClick={handleSubmit}
-          disabled={sources.length === 0 || isLoading}
+          disabled={isLoading}
           className="w-full py-3 px-4 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Training..." : "Train & continue"}

@@ -19,9 +19,18 @@ export default function OnboardingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!url) return;
-
+    
     setIsLoading(true);
+
+    // If no URL is provided, just proceed to agent setup (skip training)
+    if (!url) {
+        // Simulate a small delay for better UX
+        await new Promise(resolve => setTimeout(resolve, 500));
+        router.push("/onboarding/agent-setup");
+        setIsLoading(false);
+        return;
+    }
+
     try {
       const response = await fetch("/api/onboarding/create-from-website", {
         method: "POST",
@@ -33,7 +42,7 @@ export default function OnboardingPage() {
       });
 
       if (response.ok) {
-        router.push("/dashboard");
+        router.push("/onboarding/agent-setup");
       }
     } catch (error) {
       console.error("Error creating chatbot:", error);
@@ -106,7 +115,7 @@ export default function OnboardingPage() {
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={!url || isLoading}
+          disabled={isLoading}
           className="w-full py-3 px-4 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Creating..." : "Continue"}
